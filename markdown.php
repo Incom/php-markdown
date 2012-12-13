@@ -38,7 +38,8 @@ define( 'MARKDOWNEXTRA_VERSION',  "1.2.5" ); # Sun 8 Jan 2012
 @define( 'MARKDOWN_SIMPLE_LINEBREAKS', false);
 # Option for even simpler auto-linking syntax
 @define( 'MARKDOWN_SIMPLE_AUTOLINKS', false);
-
+# Option for removing quotes in urls
+@define( 'MARKDOWN_REMOVE_QUOTES_IN_URLS', false);
 
 #
 # WordPress settings:
@@ -791,9 +792,9 @@ class Markdown_Parser {
 		$url			=  $matches[3] == '' ? $matches[4] : $matches[3];
 		$title			=& $matches[7];
 
-		$url = $this->encodeAttribute($url);
+		$url = $this->encodeAttribute(MARKDOWN_REMOVE_QUOTES_IN_URLS ? str_replace('"', '', $url) : $url);
 
-		$result = "<a href=\"$url\"";
+		$result = '<a href="'. $url .'"';
 		if (isset($title)) {
 			$title = $this->encodeAttribute($title);
 			$result .=  " title=\"$title\"";

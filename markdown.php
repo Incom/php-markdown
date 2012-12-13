@@ -36,6 +36,8 @@ define( 'MARKDOWNEXTRA_VERSION',  "1.2.5" ); # Sun 8 Jan 2012
 
 # Option for always creating line-breaks (instead of using 2 spaces for a linebreak)
 @define( 'MARKDOWN_SIMPLE_LINEBREAKS', false);
+# Option for even simpler auto-linking syntax
+@define( 'MARKDOWN_SIMPLE_AUTOLINKS', false);
 
 
 #
@@ -1451,12 +1453,12 @@ class Markdown_Parser {
 
 
 	function doAutoLinks($text) {
-		$text = preg_replace_callback('{<((https?|ftp|dict):[^\'">\s]+)>}i', 
+		$text = preg_replace_callback('{'. (MARKDOWN_SIMPLE_AUTOLINKS ? '' : '<') .'((https?|ftp|dict):[^\'">\s]+)'. (MARKDOWN_SIMPLE_AUTOLINKS ? '' : '>') .'}i', 
 			array(&$this, '_doAutoLinks_url_callback'), $text);
 
 		# Email addresses: <address@domain.foo>
 		$text = preg_replace_callback('{
-			<
+			'. (MARKDOWN_SIMPLE_AUTOLINKS ? '' : '<') .'
 			(?:mailto:)?
 			(
 				(?:
@@ -1471,7 +1473,7 @@ class Markdown_Parser {
 					\[[\d.a-fA-F:]+\]	# IPv4 & IPv6
 				)
 			)
-			>
+			'. (MARKDOWN_SIMPLE_AUTOLINKS ? '' : '>') .'
 			}xi',
 			array(&$this, '_doAutoLinks_email_callback'), $text);
 

@@ -34,6 +34,9 @@ define( 'MARKDOWNEXTRA_VERSION',  "1.2.5" ); # Sun 8 Jan 2012
 @define( 'MARKDOWN_FN_LINK_CLASS',         "" );
 @define( 'MARKDOWN_FN_BACKLINK_CLASS',     "" );
 
+# Option for always creating line-breaks (instead of using 2 spaces for a linebreak)
+@define( 'MARKDOWN_SIMPLE_LINEBREAKS', false);
+
 
 #
 # WordPress settings:
@@ -668,7 +671,7 @@ class Markdown_Parser {
 	
 	function doHardBreaks($text) {
 		# Do hard breaks:
-		return preg_replace_callback('/ {2,}\n/', 
+		return preg_replace_callback(MARKDOWN_SIMPLE_LINEBREAKS ? '/\n/' : '/ {2,}\n/', 
 			array(&$this, '_doHardBreaks_callback'), $text);
 	}
 	function _doHardBreaks_callback($matches) {
